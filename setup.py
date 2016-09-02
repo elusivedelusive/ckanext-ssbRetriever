@@ -11,4 +11,10 @@ setup(
     Jonatan Hoff <jonatan.hoff@gmail.com>''',
     url="https://github.com/elusivedelusive/ckanext-ssbRetriever",
     license="",
+    keywords="CKAN",
+    include_package_data = True,
+    entry_points='''
+        [ckan.plugins]
+        ssbRetriever=ckanext.ssbRetriever.plugin:ssbRetriever
+    ''',
     )
