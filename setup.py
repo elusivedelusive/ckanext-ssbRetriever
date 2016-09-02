@@ -18,8 +18,9 @@ setup(
     classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
     keywords="CKAN",
     include_package_data = True,
-    entry_points='''
-        [ckan.plugins]
-        ssbRetriever=ckanext.ckanext-ssbRetriever.plugin:ssbRetriever
+    entry_points=\
+    '''
+    [ckan.plugins]
+    ssbRetriever=ckanext.ssbRetriever.plugin:ssbRetriever
     ''',
     )
