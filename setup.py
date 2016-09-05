@@ -10,6 +10,7 @@ setup(
     long_description='''Contributors:
     Jonatan Hoff <jonatan.hoff@gmail.com>''',
     author = "Jonatan Hoff",
+    author_email = "jonatan.hoff@gmail.com",
     url="https://github.com/elusivedelusive/ckanext-ssbRetriever",
     license="",
     namespace_packages=['ckanext', 'ckanext.ssbRetriever'],
