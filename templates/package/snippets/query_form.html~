@@ -1,3 +1,5 @@
+<button class="btn" name="hello world">hello World</button>
+
 <div id="queryDiv">
  	<form id="queryForm"> Query Form <br>
 		<input type="text" id="queryText" placeholder="Enter query here" required> <br>
