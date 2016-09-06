@@ -8,6 +8,34 @@ def query_form():
 class ssbRetriever(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)
     plugins.implements(p.ITemplateHelpers)
+    plugins.implements(p.IDatasetForm)
+
+    def create_package_schema(self):
+        # let's grab the default schema in our plugin
+        schema = super(ssbRetriever, self).create_package_schema()
+        #our custom field
+        schema.update({
+            'custom_text': [tk.get_validator('ignore_missing'),
+                            tk.get_converter('convert_to_extras')]
+        })
+        return schema
+
+    def update_package_schema(self):
+        schema = super(ssbRetriever, self).update_package_schema()
+        #our custom field
+        schema.update({
+            'custom_text': [tk.get_validator('ignore_missing'),
+                            tk.get_converter('convert_to_extras')]
+        })
+        return schema
+
+    def show_package_schema(self):
+        schema = super(ssbRetriever, self).show_package_schema()
+        schema.update({
+            'custom_text': [tk.get_converter('convert_from_extras'),
+                            tk.get_validator('ignore_missing')]
+        })
+        return schema
 
     def update_config(self, config_):
         toolkit.add_template_directory(config_, 'templates')
