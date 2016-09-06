@@ -7,7 +7,7 @@ def test():
 def show_query_form():
 	value = True
 	value = toolkit.asbool(value)
-	return value
+	return val
 
 class ssbRetriever(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)

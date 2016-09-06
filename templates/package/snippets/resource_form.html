@@ -1,11 +1,20 @@
 {% import 'macros/form.html' as form %}
-{%block basic_fields%}
-  {% block basic_fields_custom %}
 
-  {% endblock %}
-{% endblock %}
-{% block query_content %}
-	<button class="btn btn-primary" onclick="{%set queryFormVisible = true%}">Hent Data fra SSB</button> <br><br>
-	{% snippet 'package/snippets/query_form.html'%}
-	{{h.ssbRetriever_query_form()}}
-{% endblock%}
+<form id="resource-edit" class="dataset-form dataset-resource-form form-horizontal" method="post" action="{{ action }}" data-module="basic-form resource-form" enctype="multipart/form-data">
+
+<input name="id" value="{{ data.id }}" type="hidden"/>
+	{{ h.ssbRetriever_test() }}
+
+{% if h.ssbRetriever_show_query() %}
+	{% block query_form %}
+  	{{ form.input('ssb_url', label=_('SSB URL'), id='field_ssb_url', placeholder=_('Enter SSB Table URL Here'), value=data.ssb_url, 		error=errors.ssb_url, classes=['control-medium'])}}
+
+  	{{ form.input('ssb_query', label=_('SSB Query'), id='field_ssb_query', placeholder=_('Enter Query Here'), type=url, value=data.ssb_query, error=errors.ssb_query, classes=['control-medium']) }} 
+	{% endblock %}
+{% endif %}
+  <div class="form-actions">
+      {% block add_button %}
+      <button class="btn btn-primary" name="save" value="go-dataset-complete" type="submit" >{{ _('Add') }}</button>
+      {% endblock %}
+  </div>
+</form>
