@@ -16,6 +16,7 @@ query = '''{
     "format": "json-stat"
   }
 }'''
+
 ssbRequest("http://data.ssb.no/api/v0/no/table/08921", query)
 def ssbRequest(url, query):
     headers = {
