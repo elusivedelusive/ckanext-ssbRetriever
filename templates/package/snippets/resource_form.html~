@@ -7,8 +7,8 @@
 <form id="resource-edit" class="dataset-form dataset-resource-form form-horizontal" method="post" action="{{ action }}" data-module="basic-form resource-form" enctype="multipart/form-data">
 <input name="id" value="{{ data.id }}" type="hidden"/>
 
-<input type="url" data-module="query_form" id="query-url" placeholder="Enter SSB Table URL Here" class="control-full"> </input> <br>
-<textarea rows="4" data-module="query_form" cols="50" name ="query" form="resource-edit"> </textarea><br>
+<input type="url" id="query-url" placeholder="Enter SSB Table URL Here" class="control-full"> </input> <br>
+<textarea rows="4" cols="50" name ="query" form="resource-edit"> </textarea><br>
 
 	{% set url = "http://data.ssb.no/api/v0/no/table/08921" %}
 

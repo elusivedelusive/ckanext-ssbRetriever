@@ -4,7 +4,7 @@ ckan.module('query_form', function($, _) {
   return {
     initialize: function(){
 
-	this.el.popover({title: "url", content: this.options.url , placement: 'left'});
+	this.el.popover({title: "url", content: this.options.url.value , placement: 'left'});
     }
   };
 });

@@ -34,7 +34,7 @@ class ssbRetriever(plugins.SingletonPlugin):
 
     def update_config(self, config_):
         toolkit.add_template_directory(config_, 'templates')
-	toolkit.add_resource('templates/js','js')
+	toolkit.add_resource('js','js')
 
     def get_helpers(self):
 	return {'ssbRetriever_test':test,
