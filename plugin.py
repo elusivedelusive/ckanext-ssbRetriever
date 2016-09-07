@@ -23,7 +23,7 @@ def show_query_form(url):
 	    "format": "json-stat"
 	  }
 	}'''
-	
+
 	response = ssbRequest(url, query)
 
 	return response
@@ -43,6 +43,7 @@ class ssbRetriever(plugins.SingletonPlugin):
 
     def update_config(self, config_):
         toolkit.add_template_directory(config_, 'templates')
+		toolkit.add_resource('js','js')
 
     def get_helpers(self):
 	return {'ssbRetriever_test':test,
