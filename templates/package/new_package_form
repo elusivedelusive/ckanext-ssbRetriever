@@ -1,23 +1,29 @@
-{% import 'macros/form.html' as form %}
+{% extends 'package/snippets/package_form.html' %}
 
-<form id="resource-edit" class="dataset-form dataset-resource-form form-horizontal" method="post" action="{{ action }}" data-module="basic-form resource-form" enctype="multipart/form-data">
+{% set form_style = c.form_style or c.action %}
 
-<input name="id" value="{{ data.id }}" type="hidden"/>
+{% block stages %}
+  {% if form_style != 'edit' %}
+    {{ super() }}
+  {% endif %}
+{% endblock %}
 
-	{% block query_form %}
-  	{{ form.input('ssb_url', label=_('SSB URL'), id='field_ssb_url', placeholder=_('Enter SSB Table URL Here'), value=data.ssb_url, 		error=errors.ssb_url, classes=['control-medium'])}}
+{% block save_button_text %}
+  {% if form_style != 'edit' %}
+    {{ super() }}
+  {% else %}
+    {{ _('Update Dataset') }}
+  {% endif %}
+{% endblock %}
 
-  	{{ form.input('ssb_query', label=_('SSB Query'), id='field_ssb_query', placeholder=_('Enter Query Here'), type=url, value=data.ssb_query, error=errors.ssb_query, classes=['control-medium']) }} 
-	{% endblock %}
+{% block cancel_button %}
+  {% if form_style != 'edit' %}
+    {{ super() }}
+  {% endif %}
+{% endblock %}
 
-  <div class="form-actions">
-      {% block add_button %}
-	<ul>
-		{% for group in h.ssbRetriever_test() %}
-			<li< {{group.display_name}} </li>
-		{% endfor %}
-	</ul>
-      <button class="btn btn-primary" name="save" value="go-dataset-complete" action="runQuery" type="submit" >{{ _('Add') }}</button>
-      {% endblock %}
-  </div>
-</form>
+{% block delete_button %}
+  {% if form_style == 'edit' and h.check_access('package_delete', {'id': c.pkg_dict.id}) %}
+    {{ super() }}
+  {% endif %}
+{% endblock %}

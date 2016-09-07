@@ -31,7 +31,9 @@ def show_query_form(url):
 class ssbRetriever(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.ITemplateHelpers)
-
+    if toolkit.request.method == 'POST':
+	try:
+		toolkit.c.pkg_dict = plugins.toolkit.get_action('new_query_resource')
 
     def extract_template_name_from_request(self):
  	return self.request.path_info[9:]

@@ -1,25 +1,19 @@
 {% import 'macros/form.html' as form %}
-{% set data = data or {} %}
-{% set errors = errors or {} %}
-{% set action = form_action or h.url_for(controller='package', action='new_query_resource', id=pkg_name) %}
-
 
 <form id="resource-edit" class="dataset-form dataset-resource-form form-horizontal" method="post" action="{{ action }}" data-module="basic-form resource-form" enctype="multipart/form-data">
 
 <input name="id" value="{{ data.id }}" type="hidden"/>
+	{{ h.ssbRetriever_test() }}
 
-{% block query_form %}
+	{% block query_form %}
   	{{ form.input('ssb_url', label=_('SSB URL'), id='field_ssb_url', placeholder=_('Enter SSB Table URL Here'), value=data.ssb_url, 		error=errors.ssb_url, classes=['control-medium'])}}
 
   	{{ form.input('ssb_query', label=_('SSB Query'), id='field_ssb_query', placeholder=_('Enter Query Here'), type=url, value=data.ssb_query, error=errors.ssb_query, classes=['control-medium']) }} 
-{% endblock %}
+	{% endblock %}
 
+	{{ h.ssbRetriever_show_query() }}
 
-	{% set url = "http://data.ssb.no/api/v0/no/table/08921" %}
-
-	{{ h.ssbRetriever_show_query(url) }}
-
-{% block basic_fields %}l
+{% block basic_fields %}
 	{% block basic_fields_name %}
       		{{ form.input('name', id='field-name', label=_('Name'), placeholder=_('eg. January 2011 Gold Prices'), value=data.name, error=errors.name,
 		classes=['control-full']) }}
