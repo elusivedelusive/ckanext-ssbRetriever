@@ -1,9 +1,0 @@
-{% import 'macros/form.html' as form %}
-
-
-{% block query_form %}
-  {{ form.input('ssb-query', label=_('ssb-query'), id='field-ssb-query', placeholder=_('Enter Query Here'), value=data.ssb-query, error=errors.ssb-query, classes=['control-medium']) }}
-
-  {{ form.input('ssb-url', label=_('ssb-url'), id='field-ssb-url', placeholder=_('Enter SSB Table URL here'), value=data.ssb-url, error=errors.ssb-url, classes=['control-medium']) }}
-
-{% endblock %}
