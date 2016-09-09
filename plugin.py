@@ -16,7 +16,7 @@ class ssbRetriever(plugins.SingletonPlugin):
         toolkit.add_template_directory(config_, 'templates')
 
     def before_map(self, map):
-        map.connect('/SSB/new',
+        map.connect('/dataset/{package_id}/SSB',
                     controller='ckanext.ckanext-ssbRetriever.controllers.controller:SSBController'
                     , action='new_resource')
         return map
