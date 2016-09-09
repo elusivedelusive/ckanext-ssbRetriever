@@ -5,6 +5,7 @@
 {% set action = form_action or h.url_for(controller='package', action='new_resource', id=pkg_name) %}
 
 <form id="resource-edit" class="dataset-form dataset-resource-form form-horizontal" method="post" action="{{ action }}" data-module="basic-form resource-form query_form" enctype="multipart/form-data">
+{% set doQuery = False %}
   {% block stages %}
     {# An empty stages variable will not show the stages #}
     {% if stage %}
@@ -29,7 +30,6 @@
 <input type="url"class="controls" id="query-url" placeholder="Enter SSB Table URL Here" style="display:none" optional > </input> <br>
 <input type="text" class="controls" id="query-text" placeholder="Enter Query here" style="display:none; width:205px; height:200px;" form="resource-edit"> </input><br>
 
-<label id="query-response"> </label>
 <input type="button" class="controls btn"id="run-query" value="Run"></input> </br>
 
 {% resource 'js/query_form.js' %}
@@ -89,7 +89,7 @@
       {% endblock %}
     {% else %}
       {% block add_button %}
-      <button class="btn btn-primary" name="save" value="go-dataset-complete" type="submit">{{ _('Add') }}</button>
+      <button class="btn btn-primary" name="save" id="submitButton" value="go-dataset-complete" type="submit">{{ _('Add') }}</button>
       {% endblock %}
     {% endif %}
   </div>

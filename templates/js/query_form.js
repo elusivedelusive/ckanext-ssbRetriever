@@ -4,31 +4,27 @@ ckan.module('query_form', function($, _) {
     return {
         initialize: function() {
 
-            // proxyAll() ensures that whenever an _on*() function from this
-            // JavaScript module is called, the `this` variable in the function will
-            // be this JavaScript module object.
-            //
-            // You probably want to call proxyAll() like this in the initialize()
-            // function of most modules.
-            //
-            // This is a shortcut function provided by CKAN, it wraps jQuery's
-            // proxy() function: http://api.jquery.com/jQuery.proxy/
-            $.proxyAll(this, /_on/);
-
-            // Add a Bootstrap popover to the button. Since we don't have the HTML
-            // from the snippet yet, we just set the content to "Loading..."
-            //this.el.popover({
-            //    title: this.options.title,
-            //    html: true,
-            //    content: 'Loading... ' + document.getElementById("query-url").value,
-            //    placement: 'left'
-            //});
 		$('#toggle-query').on('click', function(){
 			$('#query-url').toggle();
 			$('#query-text').toggle();
-			$('.image-upload').toggle();
+			//$('.image-upload').toggle();
+			//$('#submitButton').toggle();
 			//$('#submitButton').toggle();
 			//$('#customSubmitButton').toggle();
+			//console.log(this.options.url_type);
+			//if(options.is_upload === true){
+			//	options.is_upload = false;
+			//} else {
+			//	options.is_upload = true;
+			//}
+			//console.log("val: " + document.getElementById('field-image-url').innerHTML);
+			//var url = document.getElementById('field-image-url');
+			
+
+			//var data = new Blob("hellow wold im blob", {type: 'text/plain'});
+			//var textfile = window.URL.createObjectURL(data);
+
+			//url.value = textfile;
 		});
 
 		var settings = {
@@ -36,51 +32,27 @@ ckan.module('query_form', function($, _) {
 			"crossdomain": true,
 			"url": document.getElementById('query-url').value,
 			"method": "POST",
-			"headers":{"cache-control": "no-cache"},
-			"data": document.getElementById('query-text').value,
+			"headers":{"cache-control": "no-cache", "Access-Control-Request-Headers":"x-requested-with"},
+			"dataType": "jsonp",
+			"data": document.getElementById('query-text').value
 		}
 
 		$('#run-query').on('click', function(){
-			settings.url = document.getElementById('query-url').value
+			
+			//var file_name = this.input.val().split(/^C:\\fakepath\\/).pop();
+      			//this.field_url_input.val(file_name);
+			settings.url = document.getElementById('query-url').value;
+			console.log("url: ") + settings.url;
+			console.log("query: ") + settings.data;
+			//$('#submitButton').toggle();
 			$.ajax(settings).done(function(response){
-				alert(response);
-				document.getElementById('query-text').setAttribute("value",response);
+				for(d in JSON.parse(response)){
+					
+					console.log(d);
+				}
 			});
 		});
-            // Add an event handler to the button, when the user clicks the button
-            // our _onClick() function will be called.
-            this.el.on('click', this._onClick);
         },
 
-        // Whether or not the rendered snippet has already been received from CKAN.
-        _snippetReceived: false,
-
-        _onClick: function(event) {
-            // Send an ajax request to CKAN to render the popover.html snippet.
-            // We wrap this in an if statement because we only want to request
-            // the snippet from CKAN once, not every time the button is clicked.
-            if (!this._snippetReceived) {
-                this.sandbox.client.getTemplate('query_fsorm.html',
-                    this.options,
-                    this._onReceiveSnippet);
-                this._snippetReceived = true;
-            }
-        },
-
-        // CKAN calls this function when it has rendered the snippet, and passes
-        // it the rendered HTML.
-        _onReceiveSnippet: function(html) {
-
-            // Replace the popover with a new one that has the rendered HTML from the
-            // snippet as its contents.
-            this.el.popover('destroy');
-            this.el.popover({
-                title: this.options.title,
-                html: true,
-                content: html,
-                placement: 'left'
-            });
-            this.el.popover('show');
-        },
     };
 });

@@ -31,7 +31,7 @@ def show_query_form(url):
 	
 	return response
 
-class NewSSBResource(PackageController):
+class ssbNewSSBResource(PackageController):
 	resource_form = 'custom_resource_form.html'
 
 class ssbRetriever(plugins.SingletonPlugin):
@@ -50,11 +50,8 @@ class ssbRetriever(plugins.SingletonPlugin):
    
     def before_map(self, map):
 	map.connect('/dataset/new_ssb_resource',
-	    controller='ckanext.ssbRetriever.controllers.SSBNewController:ResourceNew',
+	    controller='ckanext.ssbRetriever.controllers.controller:ssbCreateController',
 	    action='new')
-	map.connect('/dataset/edit{id}',
-	    controller='ckanext.ssbRetriever.controllers.SSBNewController:ResourceNew',
-	    action='edit')
 	return  map
 
     def after_map(self, map):
