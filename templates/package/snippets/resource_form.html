@@ -3,8 +3,9 @@
 {% set data = data or {} %}
 {% set errors = errors or {} %}
 {% set action = form_action or h.url_for(controller='package', action='new_resource', id=pkg_name) %}
+{% set action = h.url_for(controller='controller', action='new_resource', id=pkg_name) %}
 
-<form id="resource-edit" class="dataset-form dataset-resource-form form-horizontal" method="post" action="{{ action }}" data-module="basic-form resource-form query_form" enctype="multipart/form-data">
+<form id="resource-edit" class="dataset-form dataset-resource-form form-horizontal" method="post" action="{{ action }}" data-module="basic-form resource-form" enctype="multipart/form-data">
 {% set doQuery = False %}
   {% block stages %}
     {# An empty stages variable will not show the stages #}
@@ -31,8 +32,6 @@
 <input type="text" class="controls" id="query-text" placeholder="Enter Query here" style="display:none; width:205px; height:200px;" form="resource-edit"> </input><br>
 
 <input type="button" class="controls btn"id="run-query" value="Run"></input> </br>
-
-{% resource 'js/query_form.js' %}
 
     {% block basic_fields_name %}
       {{ form.input('name', id='field-name', label=_('Name'), placeholder=_('eg. January 2011 Gold Prices'), value=data.name, error=errors.name, classes=['control-full']) }}
