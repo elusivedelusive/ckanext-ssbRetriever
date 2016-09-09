@@ -27,7 +27,7 @@
 
 <input type="button" class="controls btn"id="toggle-query" value="Toggle Query"></input> </br>
 
-<input type="url"class="controls" id="query-url" placeholder="Enter SSB Table URL Here"  optional > </input> <br>
+<input type="url"class="controls" id="query-url" placeholder="Enter SSB Table URL Here" style="display:none" optional > </input> <br>
 <input type="text" class="controls" id="query-text" placeholder="Enter Query here" style="display:none; width:205px; height:200px;" form="resource-edit"> </input><br>
 
 <input type="button" class="controls btn"id="run-query" value="Run"></input> </br>

@@ -98,7 +98,7 @@ class SSBController(PackageController):
 	ckanurl = "http://localhost/api/action/resource_create"
 
 	#note resource ID not actually needed
-	params= {'description': 'ssb test', 'owner_org':'stavanger','package_id':'0123fadc-3a9c-4c4c-8392-c38132a136a8','name': "dataFraController", "url": " ", "id":"74bbb978-323c-4f82-9a27-77f1d2f1b663"}
+	params= {'description': 'ssb test', 'owner_org':'stavanger','package_id':'0123fadc-3a9c-4c4c-8392-c38132a136a8','name': "dataFraController", "url": " "}
 	
 	postResponse = requests.post(ckanurl, files = filesRequests, headers=headers, data = params)
 

@@ -1,0 +1,6 @@
+import requests
+import json
+
+def execute_query(query, url, endpoint):
+	r = requests.get(url)
+	return r
