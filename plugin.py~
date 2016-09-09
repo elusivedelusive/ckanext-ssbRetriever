@@ -10,7 +10,7 @@ from ckan.controllers.package import PackageController
 class ssbRetriever(plugins.SingletonPlugin):
 
     plugins.implements(plugins.IConfigurer)
-    plugins.implements(plugins.IRoutes, inherit=True)
+    plugins.implements(plugins. IRoutes, inherit=True)
 
     def update_config(self, config_):
         toolkit.add_template_directory(config_, 'templates')
