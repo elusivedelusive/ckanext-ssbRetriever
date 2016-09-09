@@ -24,7 +24,7 @@ import requests,json
 
 from ckan.common import OrderedDict, _, json, request, c, g, response
 from ckan.controllers.package import PackageController
-from ckanext.ssbRetriever.utils import execute_query
+from ckanext.ssbRetriever.utils import execute_simple_post_query, multipart_post
 
 log = logging.getLogger(__name__)
 
@@ -48,67 +48,39 @@ log = logging.getLogger(__name__)
 
 class SSBController(PackageController):
     def new_resource(self, data=None, errors=None, error_summary=None):
-	#check if metadada info exists and add it otherwise
-	#context = {'model': model, 'session': model.Session, 'user': c.user or c.author}
-	#package_info = get_action('package_show')(context, {'id': c.pkg.id})
+	#unpack variables from the request object
+	packageID = request.params.get('id')
+	queryUrl = request.params.get('query-url')
+	queryText = request.params.get('query-text')
+	name = request.params.get('name')
+	description = request.params.get('description')
 
-        #data_dict = clean_dict(dict_fns.unflatten(tuplize_dict(parse_params(request.POST))))
-	#pkg_dict = get_action('package_update')(context, data_dict)
-	#id = pkg_dict['name']
-	#data = data or clean_dict(dict_fns.unflatten(tuplize_dict(parse_params(request.POST))))
-	#resource_id = data['id']
-	#data['id'] = resource_id
-	#data['package_id'] = id
-	#get_action('resource_create')(context, data)
-
-	#query_results = execute_query(request.params['id'], "http//:vg.no")
-	#return render(query_results)
-	#if 'resource-edit' in request.params:
-	#	query_results = execute_query(request.params['query-text'], request.params['query-url'], self.packageendpoint)
-	#	c.query = request.params['query-text']
-	#	
-	#	return query_results
-
-	query = """ {
-  "query": [
-    {
-      "code": "ArbeidsTid",
-      "selection": {
-        "filter": "item",
-        "values": [
-          "1103"
-        ]
-      }
-    }
-  ],
-  "response": {
-    "format": "csv"
-  }
-}
-"""
-	url="http://data.ssb.no/api/v0/no/table/08146"
-	#headers = {'cache-control': 'no-cache'}
-	ssbResponse = requests.get(url)
-	
-	#send string as file
+	#query ssb using the input query text and url
+	ssbResponse = execute_simple_post_query(queryUrl, queryText)
+	#set the upload parameter to be the responsetext. This uploads data from the memory as if it was a file
 	filesRequests ={'upload': ('ssbData.csv', ssbResponse.text)}
-	filesCkan = [('upload', filesRequests)]
 	
-	headers = {"Authorization": "f65b83f5-c14a-4440-b07f-3be58acb686a"}	
+	#the admin users authorization key
+	headers = {"Authorization": "f65b83f5-c14a-4440-b07f-3be58acb686a"}
+	
+	#the url to the resource_create action api 
 	ckanurl = "http://localhost/api/action/resource_create"
 
-	#note resource ID not actually needed
-	params= {'description': 'ssb test', 'owner_org':'stavanger','package_id':'0123fadc-3a9c-4c4c-8392-c38132a136a8','name': "dataFraController", "url": " "}
+	#parameters NB url has to be an empty string to successfully post a file
+	params= {'description': description,'package_id': packageID,'name': name, "url": " "}
 	
-	postResponse = requests.post(ckanurl, files = filesRequests, headers=headers, data = params)
+	#use the multipart_post function to perform a post
+	postResponse = multipart_post(ckanurl, filesRequests, headers, params)
+	#, "id":"74bbb978-323c-4f82-9a27-77f1d2f1b663"
 
-	#return response
-	log.warning("================CONTROLLER=====================")
-	log.warning("response: " + postResponse.text)
-	
-	log.warning("================CONTROLLER=====================")
+	#log.warning("================CONTROLLER=====================")
+		
+	#log.warning("================CONTROLLER=====================")
 
-        return render('package/resources.html')
-
+	#redirect user to the dataset overview page
+        redirect(h.url_for(controller='package', action='read', id=packageID))
+   def new_resource_ssb(self, data=None, errors=None, error_summary=None):
+	log.warning("I AM HERE")
+	redirect(h.url_for(controller='package', action='new_resource_ssb', id=id)
 
 
