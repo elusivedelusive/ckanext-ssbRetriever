@@ -1,5 +1,0 @@
-{# The contents for a dataset popover. id - the id of the dataset num_resources - the dataset's number of resources license_title - the dataset's license title #}
-<div class="context-info">
-    <p> hello </p>
-
-</div>
