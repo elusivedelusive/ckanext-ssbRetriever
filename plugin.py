@@ -16,12 +16,15 @@ class ssbRetriever(plugins.SingletonPlugin):
         toolkit.add_template_directory(config_, 'templates')
 
     def before_map(self, map):
+	#These are routes that link to actions in the controller
+	#/dataset/{dataset}/new_resource_ssb
+
         map.connect('/dataset/new',
                     controller='ckanext.ssbRetriever.controllers.controller:SSBController'
-                    , action='new_resource')
-        map.connect('/dataset',
-                    controller='ckanext.ssbRetriever.controllers.controller:SSBController'
                     , action='new_resource_ssb')
+        map.connect('/dataset/new_resource_ssb/{id}',
+                    controller='ckanext.ssbRetriever.controllers.controller:SSBController'
+                    , action='new_ssb_form')
         return map
 
     def after_map(self, map):
