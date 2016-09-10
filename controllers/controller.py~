@@ -47,33 +47,12 @@ lookup_package_plugin = ckan.lib.plugins.lookup_package_plugin
 log = logging.getLogger(__name__)
 
 class SSBController(PackageController):
-    #these are actions
-    def new_ssb_form(self):
+    def new_resource_ssb(self):
 	packageID = request.params.get('id')
-
-
-
-        context = {'model': model, 'session': model.Session,api_version': 3, 'for_edit': True,'user': c.user or c.author, 'auth_user_obj': c.userobj}
-
-	pkg_dict = get_action('package_show')(context, {'id': packageID})
-        data = clean_dict(dict_fns.unflatten(tuplize_dict(parse_params(request.POST))))
-	errors = {}
-	error_summary = {}
-	template = 'package/new_resource_ssb.html'
-	package_type = pkg_dict['type'] or 'dataset'
-
-       	vars = {'data':data, 'errors': errors,
-                'error_summary': error_summary, 'action': 'new',
-                'resource_form_snippet': self._resource_form(package_type),
-                'dataset_type': package_type}
-
-	return render('package/new_resource_ssb.html', extra_vars=vars)
-
-	#redirect(h.url_for(controller='SSBController', action='new_ssb_resource_form', id=packageID))
-
-    def new_resource_ssb(self, data=None, errors=None, error_summary=None):
 	#unpack variables from the request object
-	packageID = request.params.get('id')
+	log.warning("================CONTROLLER=====================")
+	if request.params.get('url') != " ":
+		new_resource(packageID)
 	queryUrl = request.params.get('query-url')
 	queryText = request.params.get('query-text')
 	name = request.params.get('name')
@@ -95,10 +74,8 @@ class SSBController(PackageController):
 	
 	#use the multipart_post function to perform a post
 	postResponse = multipart_post(ckanurl, filesRequests, headers, params)
-	#, "id":"74bbb978-323c-4f82-9a27-77f1d2f1b663"
 
-	log.warning("================CONTROLLER=====================")
-	log.warmomg("PACKAGEID: " + packageID)
+	log.warning("PACKAGEID: " + packageID)
 	log.warning("URL: " + queryUrl)
 	log.warning("QUERY: " + queryText)
 	log.warning("SSBRESPONSE: " + ssbResponse.text)
@@ -108,5 +85,129 @@ class SSBController(PackageController):
 	#redirect user to the dataset overview page
         redirect(h.url_for(controller='package', action='read', id=packageID))
 
+    def new_resource(self, id, data=None, errors=None, error_summary=None):
+        ''' FIXME: This is a temporary action to allow styling of the
+        forms. '''
+        if request.method == 'POST' and not data:
+            save_action = request.params.get('save')
+            data = data or \
+                clean_dict(dict_fns.unflatten(tuplize_dict(parse_params(
+                                                           request.POST))))
+            # we don't want to include save as it is part of the form
+            del data['save']
+            resource_id = data['id']
+            del data['id']
+
+            context = {'model': model, 'session': model.Session,
+                       'user': c.user or c.author, 'auth_user_obj': c.userobj}
+
+            # see if we have any data that we are trying to save
+            data_provided = False
+            for key, value in data.iteritems():
+                if ((value or isinstance(value, cgi.FieldStorage))
+                        and key != 'resource_type'):
+                    data_provided = True
+                    break
+
+            if not data_provided and save_action != "go-dataset-complete":
+                if save_action == 'go-dataset':
+                    # go to final stage of adddataset
+                    redirect(h.url_for(controller='package',
+                                       action='edit', id=id))
+                # see if we have added any resources
+                try:
+                    data_dict = get_action('package_show')(context, {'id': id})
+                except NotAuthorized:
+                    abort(401, _('Unauthorized to update dataset'))
+                except NotFound:
+                    abort(404, _('The dataset {id} could not be found.'
+                                 ).format(id=id))
+                if not len(data_dict['resources']):
+                    # no data so keep on page
+                    msg = _('You must add at least one data resource')
+                    # On new templates do not use flash message
+                    if g.legacy_templates:
+                        h.flash_error(msg)
+                        redirect(h.url_for(controller='package',
+                                           action='new_resource', id=id))
+                    else:
+                        errors = {}
+                        error_summary = {_('Error'): msg}
+                        return self.new_resource(id, data, errors,
+                                                 error_summary)
+                # XXX race condition if another user edits/deletes
+                data_dict = get_action('package_show')(context, {'id': id})
+                get_action('package_update')(
+                    dict(context, allow_state_change=True),
+                    dict(data_dict, state='active'))
+                redirect(h.url_for(controller='package',
+                                   action='read', id=id))
+
+            data['package_id'] = id
+            try:
+                if resource_id:
+                    data['id'] = resource_id
+                    get_action('resource_update')(context, data)
+                else:
+                    get_action('resource_create')(context, data)
+            except ValidationError, e:
+                errors = e.error_dict
+                error_summary = e.error_summary
+                return self.new_resource(id, data, errors, error_summary)
+            except NotAuthorized:
+                abort(401, _('Unauthorized to create a resource'))
+            except NotFound:
+                abort(404, _('The dataset {id} could not be found.'
+                             ).format(id=id))
+            if save_action == 'go-metadata':
+                # XXX race condition if another user edits/deletes
+                data_dict = get_action('package_show')(context, {'id': id})
+                get_action('package_update')(
+                    dict(context, allow_state_change=True),
+                    dict(data_dict, state='active'))
+                redirect(h.url_for(controller='package',
+                                   action='read', id=id))
+            elif save_action == 'go-dataset':
+                # go to first stage of add dataset
+                redirect(h.url_for(controller='package',
+                                   action='edit', id=id))
+            elif save_action == 'go-dataset-complete':
+                # go to first stage of add dataset
+                redirect(h.url_for(controller='package',
+                                   action='read', id=id))
+            else:
+                # add more resources
+                redirect(h.url_for(controller='package',
+                                   action='new_resource', id=id))
+
+        # get resources for sidebar
+        context = {'model': model, 'session': model.Session,
+                   'user': c.user or c.author, 'auth_user_obj': c.userobj}
+        try:
+            pkg_dict = get_action('package_show')(context, {'id': id})
+        except NotFound:
+            abort(404, _('The dataset {id} could not be found.').format(id=id))
+        try:
+            check_access(
+                'resource_create', context, {"package_id": pkg_dict["id"]})
+        except NotAuthorized:
+            abort(401, _('Unauthorized to create a resource for this package'))
+
+        package_type = pkg_dict['type'] or 'dataset'
+
+        errors = errors or {}
+        error_summary = error_summary or {}
+        vars = {'data': data, 'errors': errors,
+                'error_summary': error_summary, 'action': 'new',
+                'resource_form_snippet': self._resource_form(package_type),
+                'dataset_type': package_type}
+        vars['pkg_name'] = id
+        # required for nav menu
+        vars['pkg_dict'] = pkg_dict
+        template = 'package/new_resource_not_draft.html'
+        if pkg_dict['state'].startswith('draft'):
+            vars['stage'] = ['complete', 'active']
+            template = 'package/new_resource.html'
+        return render(template, extra_vars=vars)
 
 

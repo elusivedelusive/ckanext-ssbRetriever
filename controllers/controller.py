@@ -47,34 +47,12 @@ lookup_package_plugin = ckan.lib.plugins.lookup_package_plugin
 log = logging.getLogger(__name__)
 
 class SSBController(PackageController):
-    #these are actions
-    def new_ssb_form(self):
+    def new_resource_ssb(self):
 	packageID = request.params.get('id')
-
-
-
-	context = {'model': model, 'session': model.Session,
-                       'user': c.user or c.author, 'auth_user_obj': c.userobj}
-
-	pkg_dict = get_action('package_show')(context, {'id': packageID})
-        data = clean_dict(dict_fns.unflatten(tuplize_dict(parse_params(request.POST))))
-	errors = {}
-	error_summary = {}
-	template = 'package/new_resource_ssb.html'
-	package_type = pkg_dict['type'] or 'dataset'
-
-       	vars = {'data':data, 'errors': errors,
-                'error_summary': error_summary, 'action': 'new',
-                'resource_form_snippet': self._resource_form(package_type),
-                'dataset_type': package_type}
-
-	return render('package/new_resource_ssb.html', extra_vars=vars)
-
-	#redirect(h.url_for(controller='SSBController', action='new_ssb_resource_form', id=packageID))
-
-    def new_resource_ssb(self, data=None, errors=None, error_summary=None):
 	#unpack variables from the request object
-	packageID = request.params.get('id')
+	log.warning("================CONTROLLER=====================")
+	if request.params.get('url') != " ":
+		redirect(h.url_for(controller='package', action='new_resource', id=packageID))
 	queryUrl = request.params.get('query-url')
 	queryText = request.params.get('query-text')
 	name = request.params.get('name')
@@ -96,10 +74,8 @@ class SSBController(PackageController):
 	
 	#use the multipart_post function to perform a post
 	postResponse = multipart_post(ckanurl, filesRequests, headers, params)
-	#, "id":"74bbb978-323c-4f82-9a27-77f1d2f1b663"
 
-	log.warning("================CONTROLLER=====================")
-	log.warmomg("PACKAGEID: " + packageID)
+	log.warning("PACKAGEID: " + packageID)
 	log.warning("URL: " + queryUrl)
 	log.warning("QUERY: " + queryText)
 	log.warning("SSBRESPONSE: " + ssbResponse.text)
@@ -108,6 +84,4 @@ class SSBController(PackageController):
 
 	#redirect user to the dataset overview page
         redirect(h.url_for(controller='package', action='read', id=packageID))
-
-
 

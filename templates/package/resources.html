@@ -6,7 +6,6 @@
 
 {% block page_primary_action %}
   {% link_for _('Add new resource'), controller='package', action='new_resource', id=c.pkg_dict.name, class_='btn btn-primary', icon='plus' %}
-  {% link_for _('Add new resource from SSB'), controller='package', action='new_resource_ssb', id=c.pkg_dict.name, class_='btn btn-primary', icon='plus' %}
 {% endblock %}
 
 {% block primary_content_inner %}

@@ -2,20 +2,18 @@
 
 {% set data = data or {} %}
 {% set errors = errors or {} %}
-{% set action = form_action or h.url_for(controller='package', action='new', id=pkg_name) %}
+{% set action = form_action or h.url_for(controller='package', action='new_resource', id=pkg_name) %}
 
-<form id="resource-edit" class="dataset-form dataset-resource-form form-horizontal" method="post" action="{{ action }}" data-module="basic-form resource-form" enctype="multipart/form-data">
-{% set doQuery = False %}
+<form id="resource-edit" class="dataset-form dataset-resource-form form-horizontal" method="post" action="{{ action }}" data-module="basic-form resource-form query_form" enctype="multipart/form-data">
+
+<input type="button" class="controls btn"id="form-toggle" value="Toggle Query"></input> </br> </br> </br>
+
   {% block stages %}
     {# An empty stages variable will not show the stages #}
     {% if stage %}
       {{ h.snippet('package/snippets/stages.html', stages=stage, pkg_name=pkg_name) }}
     {% endif %}
   {% endblock %}
-
-  {% block errors %}{{ form.errors(error_summary) }}{% endblock %}
-
-  <input name="id" value="{{ data.id }}" type="hidden"/>
 
   {% block basic_fields %}
     {% block basic_fields_url %}
@@ -25,19 +23,19 @@
          upload_label=_('File'), url_label=_('URL')) }}
     {% endblock %}
 
-<input type="button" class="controls btn"id="toggle-query" value="Toggle Query"></input> </br>
+{% resource 'js/query_form.js' %}
 
-<input type="url"class="controls" id="query-url" placeholder="Enter SSB Table URL Here"  optional > </input> <br>
-<input type="text" class="controls" id="query-text" placeholder="Enter Query here" style="display:none; width:205px; height:200px;" form="resource-edit"> </input><br>
+  {% block errors %}{{ form.errors(error_summary) }}{% endblock %}
 
-<input type="button" class="controls btn"id="run-query" value="Run"></input> </br>
+  <input name="id" value="{{ data.id }}" type="hidden"/>
 
+<div id="query-inputs" hidden>
 {% block package_basic_fields_custom %}
-	      {{ form.input('query-url', id='field-query-url', label=_('query-url'), placeholder=_('query-url'), value=data.queryurl, error=errors.queryurl, classes=['control-full']) }}
+	      {{ form.input('query-url', id='field-query-url', label=_('Query url'), placeholder=_('query-url'), value=data.queryurl, error=errors.queryurl, classes=['control-full']) }}
 
-	      {{ form.input('query-text', id='field-query-text', label=_('query-text'), placeholder=_('query-text'), value=data.querytext, error=errors.querytext, classes=['control-full']) }}
+	      {{ form.input('query-text', id='field-query-text', label=_('Query text'), placeholder=_('query-text'), value=data.querytext, error=errors.querytext, classes=['control-full']) }}
 {% endblock %}
-
+</div>
     {% block basic_fields_name %}
       {{ form.input('name', id='field-name', label=_('Name'), placeholder=_('eg. January 2011 Gold Prices'), value=data.name, error=errors.name, classes=['control-full']) }}
     {% endblock %}
@@ -93,7 +91,7 @@
       {% endblock %}
     {% else %}
       {% block add_button %}
-      <button class="btn btn-primary" name="save" id="submitButton" value="go-dataset-complete" type="submit">{{ _('Add') }}</button>
+      <button class="btn btn-primary" name="save" value="go-dataset-complete" type="submit">{{ _('Add') }}</button>
       {% endblock %}
     {% endif %}
   </div>
