@@ -21,7 +21,7 @@ class ssbRetriever(plugins.SingletonPlugin):
 
         map.connect('/dataset/new',
                     controller='ckanext.ssbRetriever.controllers.controller:SSBController'
-                    , action='new_resource')
+                    , action='new_resource_sbb')
         return map
 
     def after_map(self, map):

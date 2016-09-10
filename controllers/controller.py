@@ -48,11 +48,53 @@ log = logging.getLogger(__name__)
 
 class SSBController(PackageController):
     def new_resource_ssb(self):
-	packageID = request.params.get('id')
+	
 	#unpack variables from the request object
+	#packageID = request.params.get('id')
+	#if request.params.get('url') != " ":
+	#	redirect(h.url_for(controller='package', action='new_resource', id=packageID))
 	log.warning("================CONTROLLER=====================")
-	if request.params.get('url') != " ":
-		redirect(h.url_for(controller='package', action='new_resource', id=packageID))
+	packageID = request.params.get('id')
+	queryUrl = request.params.get('query-url')
+	queryText = request.params.get('query-text')
+	name = request.params.get('name')
+	description = request.params.get('description')
+
+	#query ssb using the input query text and url
+	ssbResponse = execute_simple_post_query(queryUrl, queryText)
+	#set the upload parameter to be the responsetext. This uploads data from the memory as if it was a file
+	filesRequests ={'upload': ('ssbData.csv', ssbResponse.text)}
+	
+	#the admin users authorization key
+	headers = {"Authorization": "f65b83f5-c14a-4440-b07f-3be58acb686a"}
+	
+	#the url to the resource_create action api 
+	ckanurl = "http://localhost/api/action/resource_create"
+
+	#parameters NB url has to be an empty string to successfully post a file
+	params= {'description': description,'package_id': packageID,'name': name, "url": " "}
+	
+	#use the multipart_post function to perform a post
+	postResponse = multipart_post(ckanurl, filesRequests, headers, params)
+
+	log.warning("PACKAGEID: " + packageID)
+	log.warning("URL: " + queryUrl)
+	log.warning("QUERY: " + queryText)
+	log.warning("SSBRESPONSE: " + ssbResponse.text)
+	log.warning("POSTRESPONSE: " + postResponse.text)
+	log.warning("================CONTROLLER=====================")
+
+	#redirect user to the dataset overview page
+        redirect(h.url_for(controller='package', action='read', id=packageID))
+
+	#FIXFIX
+    def edit_resource_ssb(self):
+	#unpack variables from the request object
+	#packageID = request.params.get('id')
+	#if request.params.get('url') != " ":
+	#	redirect(h.url_for(controller='package', action='new_resource', id=packageID))
+	log.warning("================CONTROLLER=====================")
+	packageID = request.params.get('id')
 	queryUrl = request.params.get('query-url')
 	queryText = request.params.get('query-text')
 	name = request.params.get('name')
