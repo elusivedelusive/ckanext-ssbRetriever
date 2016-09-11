@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import logging
 import ckan.lib.base as base
 import ckanext.ssbRetriever.config as plugin_settings
@@ -14,7 +16,7 @@ redirect = base.redirect
 
 class SSBController(PackageController):
     def new_resource_ssb(self):
-	
+
 	#log.warning("================CONTROLLER=====================")
 	#unpack variables from the request object
 	packageID = request.params.get('id')
@@ -29,22 +31,22 @@ class SSBController(PackageController):
 
 	#set the upload parameter to be the responsetext. This uploads data from the memory as if it was a file
 	filesRequests ={'upload': ('ssbData.csv', ssbResponse.text)}
-	
+
 	#retrieve admin user's authorization key from config file
 	headers = {"Authorization": plugin_settings.Authorization}
 
 	#retrieve url root from config file
 	ckanurl = "http://" + plugin_settings.site_root_url + "/api/action/resource_create"
 
-	#define parameters 
+	#define parameters
 	params= {'description': description,'package_id': packageID,'name': name, "url": " "}
 
 	#if we are updating an already existing resource then use its ID as well
 	if(resourceID):
 		params['id']=resourceID;
 	#parameters NB url has to be an empty string to successfully post a file
-	
-	
+
+
 	#use the multipart_post function to perform a post
 	postResponse = multipart_post(ckanurl, filesRequests, headers, params)
 
