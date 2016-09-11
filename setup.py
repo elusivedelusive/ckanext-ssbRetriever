@@ -18,8 +18,8 @@ setup(
     license='',
     classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
     keywords='CKAN POST SSB',
-    namespace_packages=['ckanext', 'ckanext.ssbRetriever'],
-    packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
+    namespace_packages=[],
+    packages=find_packages(),
     install_requires=[],
     include_package_data=True,
     entry_points='''
