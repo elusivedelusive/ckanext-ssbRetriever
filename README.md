@@ -10,7 +10,9 @@ To install, activate your CKAN virtualenv and then do:
     cd ssbRetriever
     python setup.py develop
 
-Then add 'ssbRetriever = ckanext.ssbRetriever.plugin:ssbRetriever' under ckan.plugins in the setup.py file in you root ckan folder (/usr/lib/ckan/default/src/ckan)
+Then
+    navigate to your root ckan folder (/usr/lib/ckan/default/src/ckan)
+    open setup.py and add 'ssbRetriever = ckanext.ssbRetriever.plugin:ssbRetriever' under ckan.plugins
 
 Then add 'ssbRetriever' to the ckan.plugins line in your CKAN config file, for
 example:
