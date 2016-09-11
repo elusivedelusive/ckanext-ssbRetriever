@@ -2,9 +2,9 @@
 
 {% set data = data or {} %}
 {% set errors = errors or {} %}
-{% set action = form_action or h.url_for(controller='package', action='new', id=pkg_name) %}
-{{ form_action}}
-<form id="resource-edit" class="dataset-form dataset-resource-form form-horizontal" method="post" action="{{pkg_name}}" data-module="basic-form resource-form query_form" enctype="multipart/form-data">
+{% set action = form_action or h.url_for(controller='package', action='new_resource', id=pkg_name) %}
+
+<form id="resource-edit" class="dataset-form dataset-resource-form form-horizontal" method="post" action="{{action}}" data-module="basic-form resource-form query_form" enctype="multipart/form-data">
 
 <input type="button" class="controls btn"id="form-toggle" value="Toggle Query"></input> </br> </br> </br>
 
@@ -28,6 +28,7 @@
   {% block errors %}{{ form.errors(error_summary) }}{% endblock %}
 
   <input name="id" value="{{ data.id }}" type="hidden"/>
+  <input name="resourceid" id="resourceid" value="{{ data.id }}" type="hidden"/>
 
 <div id="query-inputs" hidden>
 {% block package_basic_fields_custom %}

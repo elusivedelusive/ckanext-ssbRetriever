@@ -20,8 +20,11 @@ class ssbRetriever(plugins.SingletonPlugin):
 	#These are routes that link to actions in the controller
 
         map.connect('/dataset/new',
-                    controller='ckanext.ssbRetriever.controllers.controller:SSBController'
-                    , action='new_resource_ssb')
+		controller='ckanext.ssbRetriever.controllers.controller:SSBController'
+                , action='new_resource_ssb')
+	map.connect('/dataset/new',
+		controller='ckanext.ssbRetriever.controllers.controller:SSBController'
+                , action='new_resource_ssb')
         return map
 
     def after_map(self, map):

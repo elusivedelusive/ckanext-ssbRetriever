@@ -27,7 +27,8 @@
 
   {% block errors %}{{ form.errors(error_summary) }}{% endblock %}
 
-  <input name="id" value="{{ data.id }}" type="hidden"/>
+  <input name="id" id ="id" value="{{ data.id }}" type="hidden"/>
+  <input name="resourceid" id="resourceid" value="{{ data.id }}" type="hidden"/>
 
 <div id="query-inputs" hidden>
 {% block package_basic_fields_custom %}
