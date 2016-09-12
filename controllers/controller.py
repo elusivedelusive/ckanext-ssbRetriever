@@ -18,8 +18,8 @@ class SSBController(PackageController):
     def new_ssb(self):
 	return render('package/snippets/resource_form.html')
     def new_resource_ssb(self):
-	
-	log.warning("================CONTROLLER=====================")
+
+	#log.warning("================CONTROLLER=====================")
 	#unpack variables from the request object
 	packageID = request.params.get('id')
 	queryUrl = request.params.get('query-url')
@@ -65,4 +65,3 @@ class SSBController(PackageController):
 	else:
 		#redirect user to the dataset overview page
         	redirect(h.url_for(controller='package', action='read', id=packageID))
-

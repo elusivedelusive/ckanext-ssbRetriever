@@ -9,8 +9,8 @@ ckan.module('query_form', function($, _) {
             //if we are on the add new_resource page then set the query action to be new with id instead of new_resoure
             if (action.indexOf("new_resource") > 0) {
                 //queryAction = queryAction.replace("new_resource/", "new?id=");
-		queryAction = queryAction.replace("dataset/new_resource/", "ssb?id=");
-		console.log(queryAction);
+		              queryAction = queryAction.replace("dataset/new_resource/", "ssb?id=");
+		//console.log(queryAction);
             }
 
             //if we are on the edit resource page then set the hidden resourceID input field to contain the resource id extracted from the action url which enables it to be sent with the form
