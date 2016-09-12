@@ -15,7 +15,7 @@ abort = base.abort
 redirect = base.redirect
 
 class SSBController(PackageController):
-    def new_ssb(self):
+    def new_resource_ssb(self):
 	return render('package/snippets/resource_form.html')
     def new_resource_ssb(self):
 	
