@@ -12,7 +12,7 @@ setup(
     long_description='''Contributors:
     Jonatan Hoff <jonatan.hoff@acando.no>
     ''',
-    url='https://github.com/elusivedelusive/ssbRetriever',
+    url='https://github.com/jonatan-hoff/ssbRetriever.git',
     author='Jonatan Hoff',
     author_email='jonatan.hoff@gmail.com',
     license='',
