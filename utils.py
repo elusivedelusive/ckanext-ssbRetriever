@@ -49,16 +49,15 @@ def fixCSV(csvIn):
 
 	return out.getvalue()
 
-#
+#git
 def truncateAndNumerateColumnHeaders (headers):
 	newHeaders = []
 	headernum = 0;
 	for header in headers:
 		if(len(header) > 60):
 			header = header[0:60]
-
 		nh = header.decode('utf-8')
-       	temp = u'{} {}'.format(headernum, nh)
+		temp = u'{} {}'.format(headernum, nh)
 		newHeaders.append(temp)
 		headernum += 1
 	return newHeaders
