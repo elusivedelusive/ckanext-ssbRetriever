@@ -23,20 +23,28 @@ def fixCSV(csvIn):
 	rownum = 0
 	headers = ""
 	newHeaders = []
-	out = io.StringIO()
-	writer = csv.writer(out)
-	csvfile = StringIO(csvIn)
+	newRow = []
 
+
+	csvfile = io.StringIO(csvIn)
 	dialect = csv.Sniffer().sniff(csvfile.read(1024))
 	csvfile.seek(0)
 	r = csv.reader(csvfile, dialect)
+
+	out = io.StringIO()
+	writer = csv.writer(out, dialect)
+
+	#r = csv.reader(csvfile, delimiter=',', quotechar='"')
 	for row in r:
 		if(rownum==0):
 			newHeaders = truncateAndNumerateLongColumnHeaders(row)
 			writer.writerow(newHeaders)
 		else:
-			writer.writerow(row)
+			newRow.append(row)
 		rownum += 1
+
+	print(newRow)
+	writer.writerows(newRow)
 	return out.getvalue()
 
 #
@@ -51,4 +59,9 @@ def truncateAndNumerateLongColumnHeaders (headers):
 		headernum += 1
 	return newHeaders
 
-#print(fixCSV("StatBank.csv"))
+test = '''"region","Har innfÃ¸rt eiendomsskatt, Ja=1 Nei=0 2001","Har innfÃ¸rt eiendomsskatt, Ja=1 Nei=0 2002","Har innfÃ¸rt eiendomsskatt, Ja=1 Nei=0 2003","Har eiendomsskatt i hele kommunen, Ja=1 Nei=0 2001","Har eiendomsskatt i hele kommunen, Ja=1 Nei=0 2002","Har eiendomsskatt i hele kommunen, Ja=1 Nei=0 2003","Har eindomsskatt i hele kommunen, unntatt verker og bruk og annen nÃ¦ringseiendom, Ja=1 Nei=0 2001","Har eindomsskatt i hele kommunen, unntatt verker og bruk og annen nÃ¦ringseiendom, Ja=1 Nei=0 2002","Har eindomsskatt i hele kommunen, unntatt verker og bruk og annen nÃ¦ringseiendom, Ja=1 Nei=0 2003"
+"EAK Landet",.,..,..,.,..,..,.,..,..
+"EAKUO Landet uten Oslo",.,..,..,.,..,..,.,..,..
+"0101 Halden",..,..,..,..,..,..,..,..,..'''
+
+print(fixCSV(test))
