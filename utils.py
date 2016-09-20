@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import requests
+import csv
+import io
 
 #performs a simple post request using the python requests library
 #url = url to an endpoint that accepts post requests
@@ -15,3 +17,37 @@ def execute_simple_post_query(url, query):
 #data = various parameters that the endpoint may require
 def multipart_post(url, files, headers, params):
 	return requests.post(url, files = files, headers = headers, data = params)
+
+#use
+def fixCSV(csvIn):
+	rownum = 0
+	headers = ""
+	newHeaders = []
+	out = io.StringIO()
+	writer = csv.writer(out)
+
+	with open("StatBank.csv", "r") as csvfile:
+		dialect = csv.Sniffer().sniff(csvfile.read(1024))
+		csvfile.seek(0)
+		r = csv.reader(csvfile, dialect)
+		for row in r:
+			if(rownum==0):
+				newHeaders = truncateAndNumerateLongColumnHeaders(row)
+				writer.writerow(newHeaders)
+			rownum += 1
+			writer.writerow(row)
+		return out.getvalue()
+
+#
+def truncateAndNumerateLongColumnHeaders (headers):
+	newHeaders = []
+	headernum = 0;
+	for header in headers:
+		if(len(header) > 60):
+			header = header[0:60]
+		temp = str(headernum)+" " + header
+		headernum += 1
+		newHeaders.append("'" + temp + "'")
+	return newHeaders
+
+fixCSV("StatBank.csv")

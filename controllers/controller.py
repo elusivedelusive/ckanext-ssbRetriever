@@ -6,7 +6,7 @@ import ckanext.ssbRetriever.config as plugin_settings
 import ckan.lib.helpers as h
 from ckan.common import request, response
 from ckan.controllers.package import PackageController
-from ckanext.ssbRetriever.utils import execute_simple_post_query, multipart_post
+from ckanext.ssbRetriever.utils import execute_simple_post_query, multipart_post, fixCSV
 
 log = logging.getLogger(__name__)
 
@@ -32,7 +32,7 @@ class SSBController(PackageController):
 	ssbResponse = execute_simple_post_query(queryUrl, queryText)
 
 	#set the upload parameter to be the responsetext. This uploads data from the memory as if it was a file
-	filesRequests ={'upload': ('ssbData.csv', ssbResponse.text)}
+	filesRequests ={'upload': ('ssbData.csv',fixCSV(ssbResponse.text))}
 
 	#retrieve admin user's authorization key from config file
 	headers = {"Authorization": plugin_settings.Authorization}
