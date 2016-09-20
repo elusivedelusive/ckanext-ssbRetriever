@@ -18,7 +18,7 @@ def execute_simple_post_query(url, query):
 def multipart_post(url, files, headers, params):
 	return requests.post(url, files = files, headers = headers, data = params)
 
-#use
+#Takes a csv string and calls truncateAndNumerateColumnHeaders to truncate and numerate long headers
 def fixCSV(csvIn):
 	rownum = 0
 	headers = ""
@@ -36,6 +36,7 @@ def fixCSV(csvIn):
 	for row in r:
 		if(rownum==0):
 			newHeaders = truncateAndNumerateColumnHeaders(row)
+			#this is where the magic happens
 			newHeaders = [nh.encode('utf-8') for nh in newHeaders]
 			#print 'NH', newHeaders
 			writer.writerow(newHeaders)
@@ -49,13 +50,14 @@ def fixCSV(csvIn):
 
 	return out.getvalue()
 
-#git
+#truncates column headers over 55 characters and numerates them with a counter in the beginning of the name
 def truncateAndNumerateColumnHeaders (headers):
 	newHeaders = []
 	headernum = 0;
 	for header in headers:
 		if(len(header) > 55):
 			header = header[0:55]
+		#magic
 		nh = header.decode('utf-8')
 		temp = u'{} {}'.format(headernum, nh)
 		newHeaders.append(temp)
