@@ -32,7 +32,7 @@ class SSBController(PackageController):
 	ssbResponse = execute_simple_post_query(queryUrl, queryText)
 
 	#set the upload parameter to be the responsetext. This uploads data from the memory as if it was a file
-	filesRequests ={'upload': ('ssbData.csv',fixCSV(ssbResponse.text))}
+	filesRequests ={'upload': ('ssbData.csv',fixCSV(ssbResponse.text.encode()))}
 
 	#retrieve admin user's authorization key from config file
 	headers = {"Authorization": plugin_settings.Authorization}

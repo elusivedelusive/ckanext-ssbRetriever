@@ -27,28 +27,28 @@ def fixCSV(csvIn):
 
 
 	csvfile = io.StringIO(csvIn)
-	dialect = csv.Sniffer().sniff(csvfile.read(1024))
-	csvfile.seek(0)
-	r = csv.reader(csvfile, dialect)
+
+	r = csv.reader(csvfile)
 
 	out = io.StringIO()
-	writer = csv.writer(out, dialect)
+	writer = csv.writer(out)
 
-	#r = csv.reader(csvfile, delimiter=',', quotechar='"')
 	for row in r:
 		if(rownum==0):
-			newHeaders = truncateAndNumerateLongColumnHeaders(row)
+			newHeaders = truncateAndNumerateColumnHeaders(row)
+			print(newHeaders)
 			writer.writerow(newHeaders)
 		else:
 			newRow.append(row)
 		rownum += 1
 
-	print(newRow)
+
 	writer.writerows(newRow)
+	print(out.getvalue())
 	return out.getvalue()
 
 #
-def truncateAndNumerateLongColumnHeaders (headers):
+def truncateAndNumerateColumnHeaders (headers):
 	newHeaders = []
 	headernum = 0;
 	for header in headers:
@@ -63,5 +63,4 @@ test = '''"region","Har innfÃ¸rt eiendomsskatt, Ja=1 Nei=0 2001","Har innfÃ¸
 "EAK Landet",.,..,..,.,..,..,.,..,..
 "EAKUO Landet uten Oslo",.,..,..,.,..,..,.,..,..
 "0101 Halden",..,..,..,..,..,..,..,..,..'''
-
-print(fixCSV(test))
+#print(fixCSV(test))
