@@ -35,6 +35,8 @@
 	      {{ form.input('query-url', id='field-query-url', label=_('Query url'), placeholder=_('query-url'), value=data.queryurl, error=errors.queryurl, classes=['control-full']) }}
 
 	      {{ form.input('query-text', id='field-query-text', label=_('Query text'), placeholder=_('query-text'), value=data.querytext, error=errors.querytext, classes=['control-full']) }}
+
+        {{ form.checkbox(id='truncate', 'Truncate long columns', checked=true) }}
 {% endblock %}
 </div>
     {% block basic_fields_name %}
@@ -97,4 +99,3 @@
     {% endif %}
   </div>
 </form>
-
