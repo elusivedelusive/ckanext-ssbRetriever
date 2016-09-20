@@ -34,8 +34,9 @@ def fixCSV(csvIn):
 			if(rownum==0):
 				newHeaders = truncateAndNumerateLongColumnHeaders(row)
 				writer.writerow(newHeaders)
+			else:
+				writer.writerow(row)
 			rownum += 1
-			writer.writerow(row)
 		return out.getvalue()
 
 #
@@ -45,9 +46,9 @@ def truncateAndNumerateLongColumnHeaders (headers):
 	for header in headers:
 		if(len(header) > 60):
 			header = header[0:60]
-		temp = str(headernum)+" " + header
+		temp = str(headernum)+ " " + header
+		newHeaders.append(temp)
 		headernum += 1
-		newHeaders.append("'" + temp + "'")
 	return newHeaders
 
-fixCSV("StatBank.csv")
+#print(fixCSV("StatBank.csv"))
