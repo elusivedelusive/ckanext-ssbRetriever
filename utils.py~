@@ -55,7 +55,7 @@ def truncateAndNumerateColumnHeaders (headers):
 	for header in headers:
 		if(len(header) > 60):
 			header = header[0:60]
-		temp = '{} {}'.format(headernum, unicode(header))
+		temp = unicode('{} {}'.format(headernum, header))
 		newHeaders.append(temp)
 		headernum += 1
 	return newHeaders
