@@ -30,7 +30,7 @@ def fixCSV(csvIn):
 
 	r = csv.reader(csvfile)
 
-	out = io.StringIO()
+	out = io.BytesIO()
 	writer = csv.writer(out)
 
 	for row in r:
