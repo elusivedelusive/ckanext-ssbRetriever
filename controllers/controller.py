@@ -33,10 +33,10 @@ class SSBController(PackageController):
 
 	#set the upload parameter to be the responsetext. This uploads data from the memory as if it was a file
 	log.warning( ssbResponse.text)
-	#needs encode here
+	#needs encode 
 	temp = fixCSV(ssbResponse.text.encode('utf-8'))
-	log.warning("================CONTROLLER=====================")
-	log.warning(temp)
+	#log.warning("================CONTROLLER=====================")
+	#log.warning(temp)
 	filesRequests ={'upload': ('ssbData.csv',temp)}
 
 	#retrieve admin user's authorization key from config file

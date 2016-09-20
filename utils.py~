@@ -30,13 +30,14 @@ def fixCSV(csvIn):
 
 	r = csv.reader(csvfile)
 
-	out = io.StringIO()
+	out = io.BytesIO()
 	writer = csv.writer(out)
 
 	for row in r:
 		if(rownum==0):
 			newHeaders = truncateAndNumerateColumnHeaders(row)
-			print 'NH', newHeaders
+			newHeaders = [nh.encode('utf-8') for nh in newHeaders]
+			#print 'NH', newHeaders
 			writer.writerow(newHeaders)
 		else:
 			newRow.append(row)
@@ -44,18 +45,19 @@ def fixCSV(csvIn):
 
 
 	writer.writerows(newRow)
-	print "THIS IS UTILS =        " + out.getvalue()
+	#print "THIS IS UTILS =        " + out.getvalue()
 
 	return out.getvalue()
 
-#
+#git
 def truncateAndNumerateColumnHeaders (headers):
 	newHeaders = []
 	headernum = 0;
 	for header in headers:
-		if(len(header) > 60):
-			header = header[0:60]
-		temp = unicode('{} {}'.format(headernum, header))
+		if(len(header) > 55):
+			header = header[0:55]
+		nh = header.decode('utf-8')
+		temp = u'{} {}'.format(headernum, nh)
 		newHeaders.append(temp)
 		headernum += 1
 	return newHeaders
@@ -64,4 +66,4 @@ test = '''"region","Har innfÃ¸rt eiendomsskatt, Ja=1 Nei=0 2001","Har innfÃ¸
 "EAK Landet",.,..,..,.,..,..,.,..,..
 "EAKUO Landet uten Oslo",.,..,..,.,..,..,.,..,..
 "0101 Halden",..,..,..,..,..,..,..,..,..'''
-print(fixCSV(test))
+#print(fixCSV(test))
