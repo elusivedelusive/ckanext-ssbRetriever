@@ -33,6 +33,7 @@ class SSBController(PackageController):
 
 	truncate = request.params.get('Truncate long columns')
 	temp = ssbResponse.text
+	log.warning("TRUNCATE: " + truncate)
 	if(truncate):
 		#set the upload parameter to be the responsetext. This uploads data from the memory as if it was a file
 		#log.warning( ssbResponse.text)
