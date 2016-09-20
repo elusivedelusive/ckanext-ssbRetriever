@@ -36,6 +36,7 @@ def fixCSV(csvIn):
 	for row in r:
 		if(rownum==0):
 			newHeaders = truncateAndNumerateColumnHeaders(row)
+			newHeaders = [nh.encode('utf-8') for nh in newHeaders]
 			print 'NH', newHeaders
 			writer.writerow(newHeaders)
 		else:
@@ -55,7 +56,9 @@ def truncateAndNumerateColumnHeaders (headers):
 	for header in headers:
 		if(len(header) > 60):
 			header = header[0:60]
-		temp = '{} {}'.format(headernum, unicode(header))
+
+		nh = header.decode('utf-8')
+       	temp = u'{} {}'.format(headernum, nh)
 		newHeaders.append(temp)
 		headernum += 1
 	return newHeaders
