@@ -25,19 +25,19 @@ def fixCSV(csvIn):
 	newHeaders = []
 	out = io.StringIO()
 	writer = csv.writer(out)
+	csvfile = StringIO(csvIn)
 
-	with open("StatBank.csv", "r") as csvfile:
-		dialect = csv.Sniffer().sniff(csvfile.read(1024))
-		csvfile.seek(0)
-		r = csv.reader(csvfile, dialect)
-		for row in r:
-			if(rownum==0):
-				newHeaders = truncateAndNumerateLongColumnHeaders(row)
-				writer.writerow(newHeaders)
-			else:
-				writer.writerow(row)
-			rownum += 1
-		return out.getvalue()
+	dialect = csv.Sniffer().sniff(csvfile.read(1024))
+	csvfile.seek(0)
+	r = csv.reader(csvfile, dialect)
+	for row in r:
+		if(rownum==0):
+			newHeaders = truncateAndNumerateLongColumnHeaders(row)
+			writer.writerow(newHeaders)
+		else:
+			writer.writerow(row)
+		rownum += 1
+	return out.getvalue()
 
 #
 def truncateAndNumerateLongColumnHeaders (headers):
