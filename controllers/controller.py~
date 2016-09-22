@@ -27,8 +27,8 @@ class SSBController(PackageController):
 	resourceID = request.params.get('resourceid')
 	name = request.params.get('name')
 	description = request.params.get('description')
-        inputFormat = request.params.get('inputFormat')
-        truncate = request.params.get('Truncate long columns')
+    inputFormat = request.params.get('inputFormat')
+    truncate = request.params.get('Truncate long columns')
 
 	#query ssb using the input query text and url if it fails return 404 with description
 	try:

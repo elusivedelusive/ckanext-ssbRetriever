@@ -47,10 +47,10 @@ ckan.module('query_form', function($, _) {
             $('#inputFormat').change(function() {
                 if ($(this).val() === "csv") {
 			$('#truncate').show();
-			$('label[for=truncate]').show();
+			$('#truncate label').show();
                 } else if ($(this).val() === "json") {
 			$('#truncate').hide();
-			$('label[for=truncate]').hide();
+			$('#truncate label').hide();
                 }
             });
         }
