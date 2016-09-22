@@ -27,14 +27,11 @@ def fixCSV(csvIn):
 
 
 	csvfile = io.BytesIO(csvIn)
-	
-	dialect = csv.Sniffer().sniff(csvfile.read(1024))
-	csvfile.seek(0)
-	r = csv.reader(csvfile, dialect)
 
-	
+	r = csv.reader(csvfile)
+
 	out = io.BytesIO()
-	writer = csv.writer(out, dialect)
+	writer = csv.writer(out)
 
 	for row in r:
 		if(rownum==0):
