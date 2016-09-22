@@ -4,7 +4,7 @@ import logging
 import ckan.lib.base as base
 import ckanext.ssbRetriever.config as plugin_settings
 import ckan.lib.helpers as h
-from ckan.common import request, response
+from ckan.common import request, response, _
 from ckan.controllers.package import PackageController
 from ckanext.ssbRetriever.utils import execute_simple_post_query, multipart_post, fixCSV
 
@@ -29,13 +29,17 @@ class SSBController(PackageController):
 	description = request.params.get('description')
         inputFormat = request.params.get('inputFormat')
 	#query ssb using the input query text and url
-	ssbResponse = execute_simple_post_query(queryUrl, queryText)
+	try:
+	    ssbResponse = execute_simple_post_query(queryUrl, queryText)
+	except:
+	    abort(404, _('Invalid query'))
+	if ssbResponce.status_code != 200:
+		abort(404, _('Invalid query'))
+
 
 	truncate = request.params.get('Truncate long columns')
 	temp = ssbResponse.text
 
-	log.warning("================CONTROLLER=====================")
-	log.warning("format = " + inputFormat)
         if inputFormat == "csv":
             if truncate:
     		#set the upload parameter to be the responsetext. This uploads data from the memory as if it was a file
