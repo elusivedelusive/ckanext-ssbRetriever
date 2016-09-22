@@ -27,27 +27,29 @@ class SSBController(PackageController):
 	resourceID = request.params.get('resourceid')
 	name = request.params.get('name')
 	description = request.params.get('description')
-        inputFormat = request.params.get('inputFormat')
-	#query ssb using the input query text and url
+    inputFormat = request.params.get('inputFormat')
+    truncate = request.params.get('Truncate long columns')
+
+	#query ssb using the input query text and url if it fails return 404 with description
 	try:
 	    ssbResponse = execute_simple_post_query(queryUrl, queryText)
 	except:
 	    abort(404, _('Invalid query'))
 
-	truncate = request.params.get('Truncate long columns')
-	temp = ssbResponse.text
+	data = ssbResponse.text
 
+        #handle formats
         if inputFormat == "csv":
             if truncate:
     		#set the upload parameter to be the responsetext. This uploads data from the memory as if it was a file
     		#log.warning( ssbResponse.text)
     		#needs encode
-    	        temp = fixCSV(ssbResponse.text.encode('utf-8'))
+    	        data = fixCSV(ssbResponse.text.encode('utf-8'))
     		#log.warning("================CONTROLLER=====================")
     		#log.warning(temp)
-            filesRequests ={'upload': ('ssbData.csv',temp)}
+            filesRequests ={'upload': ('ssbData.csv',data)}
         else:
-            filesRequests ={'upload': ('ssbData.json',temp)}
+            filesRequests ={'upload': ('ssbData.json',data)}
 
 	#retrieve admin user's authorization key from config file
 	headers = {"Authorization": plugin_settings.Authorization}

@@ -25,14 +25,16 @@ def fixCSV(csvIn):
 	newHeaders = []
 	newRow = []
 
-
+	#emulate file
 	csvfile = io.BytesIO(csvIn)
-	
+
+	#determine dialect
 	dialect = csv.Sniffer().sniff(csvfile.read(1024))
 	csvfile.seek(0)
+	#setup reader
 	r = csv.reader(csvfile, dialect)
 
-	
+	#setup writer
 	out = io.BytesIO()
 	writer = csv.writer(out, dialect)
 
@@ -41,7 +43,6 @@ def fixCSV(csvIn):
 			newHeaders = truncateAndNumerateColumnHeaders(row)
 			#this is where the magic happens
 			newHeaders = [nh.encode('utf-8') for nh in newHeaders]
-			#print 'NH', newHeaders
 			writer.writerow(newHeaders)
 		else:
 			newRow.append(row)
@@ -49,7 +50,6 @@ def fixCSV(csvIn):
 
 
 	writer.writerows(newRow)
-	#print "THIS IS UTILS =        " + out.getvalue()
 
 	return out.getvalue()
 
