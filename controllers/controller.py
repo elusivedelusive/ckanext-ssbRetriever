@@ -27,20 +27,24 @@ class SSBController(PackageController):
 	resourceID = request.params.get('resourceid')
 	name = request.params.get('name')
 	description = request.params.get('description')
-
+    inputFormat = request.params.get('format')
 	#query ssb using the input query text and url
 	ssbResponse = execute_simple_post_query(queryUrl, queryText)
 
 	truncate = request.params.get('Truncate long columns')
 	temp = ssbResponse.text
-	if(truncate):
-		#set the upload parameter to be the responsetext. This uploads data from the memory as if it was a file
-		#log.warning( ssbResponse.text)
-		#needs encode 
-		temp = fixCSV(ssbResponse.text.encode('utf-8'))
-		#log.warning("================CONTROLLER=====================")
-		#log.warning(temp)
-	filesRequests ={'upload': ('ssbData.csv',temp)}
+
+    if(inputFormat == "csv"):
+    	if(truncate):
+    		#set the upload parameter to be the responsetext. This uploads data from the memory as if it was a file
+    		#log.warning( ssbResponse.text)
+    		#needs encode
+    		temp = fixCSV(ssbResponse.text.encode('utf-8'))
+    		#log.warning("================CONTROLLER=====================")
+    		#log.warning(temp)
+    	filesRequests ={'upload': ('ssbData.csv',temp)}
+    else:
+        filesRequests ={'upload': ('ssbData.json',temp)}
 
 	#retrieve admin user's authorization key from config file
 	headers = {"Authorization": plugin_settings.Authorization}
