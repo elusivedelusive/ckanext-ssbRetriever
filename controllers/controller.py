@@ -55,7 +55,8 @@ class SSBController(PackageController):
 	headers = {"Authorization": plugin_settings.Authorization}
 
 	#retrieve url root from config file
-	ckanurl = "http://" + plugin_settings.site_root_url + "/api/action/resource_create"
+	#WARNING this will only work with https 
+	ckanurl = "https://" + plugin_settings.site_root_url + "/api/action/resource_create"
 
 	#define parameters
 	params= {'description': description,'package_id': packageID,'name': name, "url": " "}
