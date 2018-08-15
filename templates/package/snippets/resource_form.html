@@ -38,7 +38,7 @@
 
         {{ form.select('inputFormat', label=_('format'), options=[{'name':csv, 'value': "csv"},{'name': json, 'value': "json"}], selected=csv, error=errors.inputFormat) }}
 
-        {{ form.checkbox('Truncate long columns', id="truncate", checked=true, value=1) }}
+        {{ form.checkbox('truncate_long_columns', id="truncate", checked=true, value=1) }}
 
 {% endblock %}
 </div>
