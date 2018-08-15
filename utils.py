@@ -36,7 +36,7 @@ def fixCSV(csvIn):
 
 	#setup writer
 	out = io.BytesIO()
-	writer = csv.writer(out, dialect)
+	writer = csv.writer(out, dialect, escapechar='\\')
 
 	for row in r:
 		if(rownum==0):
